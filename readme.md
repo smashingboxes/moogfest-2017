@@ -1,10 +1,13 @@
-# Building a Programmable Synth for Less Than $20
+# Building a Programmable Synth for $20
 
 For [Moogfest](http://www.moogfest.com/) this year, Smashing Boxes will be hosting a VIP reception
 featuring some innovative projects we have done in the areas of digital art, machine learning, and
 data visualization. We want to do more than just show however; we wanted to give participants
 something that they could go home and hack on as well. Our goal was to put together a small kit of
-electronics that would allow VIP festival-goers to build their own programmable synthesizer.
+electronics that would allow VIP festival-goers to build their own programmable synthesizer. We are
+not associated with any of the products discussed in this post; we simply wanted to put together
+a kit that could be functional for around $20, including prototyping materials like a breadboard
+and wires.
 
 This guide will walk through all the parts needed, the theory behind how this project works, and
 finally how to assemble the parts, and how to write software that controls it.
@@ -19,17 +22,25 @@ finally how to assemble the parts, and how to write software that controls it.
   memory (256kB Flash, 64k RAM) and the True Random Number Generator, which could be particularly
   fun when working with music. Price: $11.
 - We picked [a simple 0.5W speaker from Adafruit](https://www.adafruit.com/product/1890) as the
-  output for our synthesizer. Also needed was a resistor in order to limit the power being sent into
-  the speaker since hooking this up to the USB's 5V power line would be too much. Price: $1.50
+  output for our synthesizer. Also needed was a
+  [resistor](https://www.digikey.com/product-detail/en/vishay-bc-components/SFR2500002439FR500/PPC24.3YCT-ND/596973)
+  in order to limit the power being sent into the speaker since hooking this up to the USB's 5V
+  power line would be too much. Price: $1.50
 - In order to deliver power to the speaker, we are using a
   [simple N-channel MOSFET (2N7000)](https://www.onsemi.com/pub/Collateral/2N7000-D.PDF)
   to switch on and off the full power to the speaker. This is a simple and cheap circuit, but only
-  allows two states: on and off. This means that we can only use square waves to drive. Price: $0.38
-- We also need a way to power and connect all this stuff. For prototyping, we bought a simple 400
-  connection breadboard and a 40-wire cable with male/male connectors. If you don't have a USB
-  B-micro connector, you will also need to buy one since the Nucleo kits do not include them.
+  allows two states: on and off. This means that we can only use square waves to drive our speaker.
+  Price: $0.38
+- We also need a way to power and connect all this stuff. For prototyping, we bought a simple
+  [400 connection breadboard](https://www.digikey.com/product-detail/en/bud-industries/BB-32621/377-2094-ND/4156445)
+  and a
+  [40-wire cable with male/male connectors](https://www.digikey.com/product-detail/en/adafruit-industries-llc/758/1528-1154-ND/5353614).
+  If you don't have a USB B-micro connector, you will
+  [also need to buy one](https://www.digikey.com/product-detail/en/qualtek/3025010-03/Q853-ND/4341883)
+  since the Nucleo kits do not include them.
 - The complete parts list with links to Digikey for ordering can be found on our
-  [moogfest-2017](https://github.com/smashingboxes/moogfest-2017) repository on Github.
+  [moogfest-2017](https://github.com/smashingboxes/moogfest-2017blob/master/assets/parts.csv)
+  repository on Github. Total cost for one kit: **$21.26**
 
 
 ## Circuit Theory
@@ -93,7 +104,7 @@ analog input on your microcontroller, you can get a reading of where the dial is
 
 If you haven't used a breadboard before, check out
 [this tutorial](https://computers.tutsplus.com/tutorials/how-to-use-a-breadboard-and-build-a-led-circuit--mac-54746)
-which goes through the basics of how the breadboard is internally connected. In this guide, I will
+which goes through the basics of how the breadboard is internally connected. This guide will
 use the notation `letter:number` to denote the row and column that the wires or parts should be
 placed in. These letters and numbers are marked on the board suggested in the parts above.
 
@@ -129,9 +140,9 @@ Finally, lets wire the speaker and transistor up.
 
 ![Assembly Picture 3](assets/assembly-3.jpg)
 
-
-Note: There is an error in this picture: instead of `a:30` being tied to the 5V line, it is tied to
+Note: there is an error in this picture. Instead of `a:30` being tied to the 5V line, it is tied to
 `Vin`. Please connect `a:30` to `j:4`, not `j:1` as depicted in the picture.
+
 
 ### Ready To Program
 
@@ -250,6 +261,9 @@ to use the DACS.
 
 ---
 
-The reason we are hosting this event is to highlight everything that spun out of Smashing Labs. We want to highlight that protected innovation time is important to continually pushing the limits and implementing what we have learned in meaningful way.
+Hopefully this covers everything you need to know in order to build your own programmable synth.
+If you have any problems with setting things up, we've set up an email that you can use to ask
+questions: [synth-help@smashingboxes.com](mailto:synth-help@smashingboxes.com).
 
-We are community partners and pairing with Moogfest strengthens the ties not only with Durham, but technology and music as well.
+The reason we are hosting this event is to highlight the projects that have spun out of Smashing
+Labs, including this synth kit.
