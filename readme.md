@@ -39,7 +39,7 @@ finally how to assemble the parts, and how to write software that controls it.
   [also need to buy one](https://www.digikey.com/product-detail/en/qualtek/3025010-03/Q853-ND/4341883)
   since the Nucleo kits do not include them.
 - The complete parts list with links to Digikey for ordering can be found on our
-  [moogfest-2017](https://github.com/smashingboxes/moogfest-2017blob/master/assets/parts.csv)
+  [moogfest-2017](https://github.com/smashingboxes/moogfest-2017/blob/master/assets/parts.csv)
   repository on Github. Total cost for one kit: **$21.26**
 
 
