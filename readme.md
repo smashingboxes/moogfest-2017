@@ -102,33 +102,36 @@ placed in. These letters and numbers are marked on the board suggested in the pa
 
 Let's start by laying out where all the components will go. Start by connecting the Nucleo board to
 the top of the breadboard so that pin `D1/TX` is connected to `d:1` and `VIN` is connected to `h:1`.
-Connect the resistor to the very bottom of the board: `30e` and `30f`. The other two parts will go
-in the middle of the board: the potentiometer should be connected to `g:21,22,23` and the transistor
-should be connected to `j:23,24,25`. The transistor should have its flat side facing the center of
-the breadboard.
+Connect the resistor to the very bottom of the board: `e:30` and `f:30`. The potentiometer will be
+connected to `g:20,21,22` with its side legs set in the groove in the middle of the breadboard. The
+transistor should be connected to `j:22,23,24`. The transistor should have its flat side facing the
+center of the breadboard.
 
-<pic>
+![Assembly Picture 1](assets/assembly-1.jpg)
 
 
 ### Wire The Potentiometer
 
 To wire the potentiometer, connect the following pins:
-- Potentiometer Pin 1 `i:21` to the microcontroller's 3.3V line, `j:14`.
-- Potentiometer Pin 2 `i:22` to the microcontroller's A0 input, `j:12`.
-- Potentiometer Pin 3 `i:23` to the microcontroller's GND pin, `j:2`.
+- Potentiometer Pin 1 `i:20` to the microcontroller's 3.3V line, `j:14`.
+- Potentiometer Pin 2 `i:21` to the microcontroller's A0 input, `j:12`.
+- Potentiometer Pin 3 `i:22` to the microcontroller's GND pin, `j:2`.
 
-<pic>
+![Assembly Picture 2](assets/assembly-2.jpg)
 
 
 ### Wire The Transistor
 
 Finally, lets wire the speaker and transistor up.
-- One `speaker cable` to the source of the MOSFET, `i:25`.
-- One `speaker cable` to one side of the resistor, `i:30`.
+- One `speaker cable` to the source of the MOSFET, `i:23`.
+- One `speaker cable` to one side of the resistor, `j:30`.
 - The 5V line `i:4` to the other side of the resistor, `a:30`.
 
-<pic>
+![Assembly Picture 3](assets/assembly-3.jpg)
 
+
+Note: There is an error in this picture: instead of `a:30` being tied to the 5V line, it is tied to
+`Vin`. Please connect `a:30` to `j:4`, not `j:1` as depicted in the picture.
 
 ### Ready To Program
 
