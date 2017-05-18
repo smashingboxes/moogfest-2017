@@ -193,11 +193,11 @@ rhythm from Daft Punk's Random Access Memories, using the potentiometer to pitch
 couple of helper functions that allow you to call notes by name instead of frequency and to keep
 basic tempo.
 
-The code for this can be found [here](https://github.com/smashingboxes/moogfest-2017/giorgio/main.cpp).
+The code for this can be found [here](https://github.com/smashingboxes/moogfest-2017/blob/master/giorgio/main.cpp).
 If you just want to program your controller and go, you can download the compiled version:
-[giorgio.bin](https://github.com/smashingboxes/moogfest-2017/assets/giorgio.bin). To use this,
-start by plugging your Nucleo in to enumerate it as a flash drive. Simply drag-and-drop this file
-onto the Nucleo and it will reprogram itself and start running this program.
+[giorgio.bin](https://github.com/smashingboxes/moogfest-2017/blob/master/assets/giorgio.bin). To
+use this, start by plugging your Nucleo in to enumerate it as a flash drive. Simply drag-and-drop this
+file onto the Nucleo and it will reprogram itself and start running this program.
 
 
 ## Where To Go From Here

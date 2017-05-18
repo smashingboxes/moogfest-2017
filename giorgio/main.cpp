@@ -167,7 +167,6 @@ int main() {
             const int min_note = _E4;
             root = ceil(potentiometer.read() * (max_note - min_note)) + min_note;
 
-
             if (tune[i].rest) {
                 mypwm.write(0);
             } else {
