@@ -4,13 +4,13 @@ For [Moogfest](http://www.moogfest.com/) this year, Smashing Boxes will be hosti
 featuring some innovative projects we have done in the areas of digital art, machine learning, and
 data visualization. We want to do more than just show however; we wanted to give participants
 something that they could go home and hack on as well. Our goal was to put together a small kit of
-electronics that would allow VIP festival-goers to build their own programmable synthesizer. We are
+electronics that would allow festival-goers to build their own programmable synthesizer. We are
 not associated with any of the products discussed in this post; we simply wanted to put together
 a kit that could be functional for around $20, including prototyping materials like a breadboard
 and wires.
 
-This guide will walk through all the parts needed, the theory behind how this project works, and
-finally how to assemble the parts, and how to write software that controls it.
+This guide will walk through all the parts needed, the theory behind how this project works, how to
+assemble the parts, and how to write software that controls it.
 
 
 ## The Parts
@@ -22,10 +22,10 @@ finally how to assemble the parts, and how to write software that controls it.
   memory (256kB Flash, 64k RAM) and the True Random Number Generator, which could be particularly
   fun when working with music. Price: $11.
 - We picked [a simple 0.5W speaker from Adafruit](https://www.adafruit.com/product/1890) as the
-  output for our synthesizer. Also needed was a
+  output for our synthesizer. In order to use this with the 5V power that USB supplies, we also
+  added in a
   [resistor](https://www.digikey.com/product-detail/en/vishay-bc-components/SFR2500002439FR500/PPC24.3YCT-ND/596973)
-  in order to limit the power being sent into the speaker since hooking this up to the USB's 5V
-  power line would be too much. Price: $1.50
+  in order to limit the power being sent into the speaker. Price: $1.50
 - In order to deliver power to the speaker, we are using a
   [simple N-channel MOSFET (2N7000)](https://www.onsemi.com/pub/Collateral/2N7000-D.PDF)
   to switch on and off the full power to the speaker. This is a simple and cheap circuit, but only
@@ -37,8 +37,8 @@ finally how to assemble the parts, and how to write software that controls it.
   [40-wire cable with male/male connectors](https://www.digikey.com/product-detail/en/adafruit-industries-llc/758/1528-1154-ND/5353614).
   If you don't have a USB B-micro connector, you will
   [also need to buy one](https://www.digikey.com/product-detail/en/qualtek/3025010-03/Q853-ND/4341883)
-  since the Nucleo kits do not include them.
-- The complete parts list with links to Digikey for ordering can be found on our
+  since the Nucleo kits do not include one.
+- The complete parts list with links to Digikey for ordering can be found in our
   [moogfest-2017](https://github.com/smashingboxes/moogfest-2017/blob/master/assets/parts.csv)
   repository on Github. Total cost for one kit: **$21.26**
 
@@ -55,16 +55,16 @@ In order for a speaker to produce sound, it needs to be fed a signal that causes
 back and forth. This is typically done by producing a very weak signal, like one coming from a
 microphone or guitar, and putting it through an amplifier.
 
-For our cheap version, we will be using a transistor to simply switch the speaker on and off. A
-transistor is a voltage controlled switch; it allows us to turn on and off a high current circuit
-(like a speaker) using a low current circuit (like a microcontroller pin).
+For our cheap version, we will be using a transistor to simply switch the speaker all-on and
+all-off. A transistor is a voltage controlled switch; it allows us to turn on and off a high current
+circuit (like a speaker) using a low current circuit (like a microcontroller pin).
 
 ![Transistor Circuit](assets/transistor.png)
 
 When the microcontroller pin goes high, the speaker circuit turns on, sending current through the
 speaker and causing the cone to move. When the pin goes low, the circuit is shut off and the cone
 moves back. These movements produce sound! The big limitation of this circuit, however, is that the
-signal is either all on or all off (digital), meaning it will only create a square wave.
+signal is either all-on or all-off (digital), meaning it will only create a square wave.
 
 You may also notice that there is a resistor in the picture. The speaker that we chose is rated at
 0.5W, and has an impedance of 8 ohms. Power is calculated as:
@@ -73,9 +73,9 @@ You may also notice that there is a resistor in the picture. The speaker that we
 
 For `V = 5V; R = 8 Ohm`, the power calculates out to 3.125W! In order to make sure that the speaker
 doesn't burn out, we need to add a current limiting resistor. Since we cannot change the impedance
-of the speaker, we need to change the input voltage by using a simple voltage divider. Using the
-formula above by instead solving for V by assuming `R = 8 Ohm, P = 0.5W`, we find that the max
-voltage for the speaker is `2V`. We can finally calculate the resistance needed using:
+of the speaker, we need to change the input voltage by using a simple voltage divider. If we instead
+solve for `V` in the formula above by fixing `R = 8 Ohm, P = 0.5W`, we find that the max voltage for
+the speaker is `2V`. We can finally calculate the resistance needed using:
 
 `2V = 5V * 8 Ohm / (R1 + 8 Ohm)`
 
@@ -104,7 +104,7 @@ analog input on your microcontroller, you can get a reading of where the dial is
 
 If you haven't used a breadboard before, check out
 [this tutorial](https://computers.tutsplus.com/tutorials/how-to-use-a-breadboard-and-build-a-led-circuit--mac-54746)
-which goes through the basics of how the breadboard is internally connected. This guide will
+which goes through the basics of how the breadboard is internally connected. Our guide will
 use the notation `letter:number` to denote the row and column that the wires or parts should be
 placed in. These letters and numbers are marked on the board suggested in the parts above.
 
@@ -194,24 +194,27 @@ float reading_1 = potentiometer.read();
 float reading_2 = potentiometer;       
 ```
 
-That is pretty much all you need! Creating a basic synthesizer could be as simple as:
+That is pretty much all you need! We can use these primitives in a bunch of different ways to create
+sound. Creating a basic synthesizer that lets you use the potentiometer to sweep through 3 octaves
+is as simple as:
 
 ```
-// Loop forever, letting the potentiometer sweep between three octaves of C.
 my_pwm.write(0.5);
 while(1) my_pwm.period(1 / (220 + 1540 * potentiometer));
 ```
 
-The demo that we made outputs the [Giorgio Morodor](https://www.youtube.com/watch?v=zhl-Cs1-sG4)
-rhythm from Daft Punk's Random Access Memories, using the potentiometer to pitch shift. There are a
-couple of helper functions that allow you to call notes by name instead of frequency and to keep
-basic tempo.
+We wanted to make something a little more complex though, so we made a demo that lets the user
+shift the pitch dynamically for the [Giorgio Morodor](https://www.youtube.com/watch?v=zhl-Cs1-sG4)
+rhythm from Daft Punk's Random Access Memories. There are a couple of helper functions that allow
+you to call notes by name instead of frequency and to keep basic tempo.
 
-The code for this can be found [here](https://github.com/smashingboxes/moogfest-2017/blob/master/giorgio/main.cpp).
+The code for this demo can be found
+[here](https://github.com/smashingboxes/moogfest-2017/blob/master/giorgio/main.cpp).
 If you just want to program your controller and go, you can download the compiled version:
 [giorgio.bin](https://github.com/smashingboxes/moogfest-2017/blob/master/assets/giorgio.bin). To
-use this, start by plugging your Nucleo in to enumerate it as a flash drive. Simply drag-and-drop this
-file onto the Nucleo and it will reprogram itself and start running this program.
+program the Nucleo, plug it into a computer and it will enumerate it as a flash drive. You can then
+drag-and-drop the `.bin` file onto the Nucleo and it will reprogram itself and start running this
+program.
 
 
 ## Where To Go From Here
@@ -219,11 +222,15 @@ file onto the Nucleo and it will reprogram itself and start running this program
 
 ### Adding Buttons, Switches, and Dials
 
-- **Buttons** can be read using `DigitalIn`, and are read into the chip as `0` or `1`. If you want
-- **Switches** work the same as buttons, except that they stay in the position that they are closed.
+- **Buttons** can be read using `DigitalIn`, and are read into the chip as `0` or `1`. If you wanted
+  a simple keyboard, you could achieve this by connecting one button per note that you want to
+  control. Buttons only change their state while they are pressed; once they are released they
+  reset.
+- **Switches** work the same as buttons, except that they stay in the position that they are set to.
   They are read using the same mechanisms, and for synths are useful for settings that will not
-  change.
-- **Potentiometers** have already been covered above, but there are plenty more inputs! Remember
+  change. If you want to switch between a major and minor arpeggiator without having to hold a
+  button, a switch is likely the right move.
+- **Potentiometers** have already been covered above, but can be used for so much more! Remember
   that potentiometers are good for creating signals between some min and max value.
 - **Rotary Encoders** are dials like a potentiometer, but instead of having a min and max value,
   they output a signal only when they are turned. These are good for selecting one item in a list
@@ -233,9 +240,10 @@ file onto the Nucleo and it will reprogram itself and start running this program
 ### Using Analog Inputs
 
 In this example, we used one of the 9 analog inputs to read in the signal from a potentiometer.
-Analog inputs can be used for so much more, from reading temperature sensors to reading inputs from
-your other synthesizer components. We recommend checking out [sparkfun.com](https://www.sparkfun.com)
-or [adafruit.com](https://www.adafruit.com) for more easy to use, well-documented components.
+Analog inputs can be used for so much more, from reading temperature sensors and light sensors to
+reading inputs from your other synthesizer components. We recommend checking out
+[sparkfun.com](https://www.sparkfun.com) or [adafruit.com](https://www.adafruit.com) for more easy
+to use, well-documented components.
 
 
 ### Using Analog Outputs
@@ -243,9 +251,9 @@ or [adafruit.com](https://www.adafruit.com) for more easy to use, well-documente
 Square waves are great, but there are so many other waves that can completely change the sound of
 the synth. As mentioned before, there are 2 digital-to-analog outputs, or DACs, that allow us to
 send an analog signal out of our chip. This opens the door to all kinds of other waves that are
-common in synths, such as [sine waves and sawtooth waves](https://www.youtube.com/watch?v=j2uB4nKzGlg)
-Since the transistor circuit is on-off only, we will have to use one or the two following methods
-to use the DACS.
+common in synths, such as [sine waves and sawtooth waves](https://www.youtube.com/watch?v=j2uB4nKzGlg).
+Since the transistor driver circuit is on-off only, we will have to use one of the following two
+ways to output our sound into the world:
 
 1. Output the signal at line-level and use headphones or other speakers. This is the more modular
    and simple approach since it just requires some passive components and can connect to far more.
@@ -263,7 +271,11 @@ to use the DACS.
 
 Hopefully this covers everything you need to know in order to build your own programmable synth.
 If you have any problems with setting things up, we've set up an email that you can use to ask
-questions: [synth-help@smashingboxes.com](mailto:synth-help@smashingboxes.com).
+questions: [synth-help@smashingboxes.com](mailto:synth-help@smashingboxes.com). If you use this kit
+to build a cool new type of synth, we would also love to hear about it.
 
 The reason we are hosting this event is to highlight the projects that have spun out of Smashing
-Labs, including this synth kit.
+Labs, including this synth kit. We hope that if you are at Moogfest, you have the chance to check
+out some of the other fun projects that we have been working on this year.
+
+Good luck, and happy hacking.
