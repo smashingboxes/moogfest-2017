@@ -134,7 +134,8 @@ To wire the potentiometer, connect the following pins:
 ### Wire The Transistor
 
 Finally, lets wire the speaker and transistor up.
-- One `speaker cable` to the source of the MOSFET, `i:23`.
+- The PWM audio signal `a:6` to the gate of the transistor `i:23`.
+- One `speaker cable` to the source of the MOSFET, `i:24`.
 - One `speaker cable` to one side of the resistor, `j:30`.
 - The 5V line `i:4` to the other side of the resistor, `a:30`.
 
